@@ -1,18 +1,23 @@
-import './App.css'
+import "./App.css";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import axios from "axios";
-import { useEffect, useState } from 'react';
-import { Paginator } from "primereact/paginator"; 
+import { useEffect, useRef, useState } from "react";
+import { Paginator } from "primereact/paginator";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
-        
-export default function App() {
+import "primeicons/primeicons.css";
+import { OverlayPanel } from "primereact/overlaypanel";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
 
-  const [checked, setChecked] = useState(false);
+export default function App() {
+  const [checked, setChecked] = useState<(number | string)[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(12);
+  const op = useRef<OverlayPanel>(null);
+  const [value, setValue] = useState(0);
 
   const onPageChange = (event: {
     first: number;
@@ -25,14 +30,16 @@ export default function App() {
   };
 
   const onKeyChange = (e: CheckboxChangeEvent) => {
-    let _selectedKey = [...selectedKey];
+    setChecked(e.value);
+  };
 
-    if (e.checked) {
-      _selectedKey.push(e.value);
-    } else {
-      _selectedKey = selectedKey.filter((key: { key: string }) => key.key !== e.value.key);
-    }
-    setSelectedKey(_selectedKey);
+  const selectRows = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    const newChecked = [...checked];
+    newChecked.splice(0, 0, ...products.slice(first, first + value));
+    setChecked(newChecked); 
+    op.current?.hide();
   };
 
   useEffect(() => {
@@ -43,7 +50,10 @@ export default function App() {
         );
         setProducts(response.data.data);
       } catch (error: unknown) {
-        console.error("Error fetching data:", error instanceof Error ? error.message : 'Data not found Error');
+        console.error(
+          "Error fetching data:",
+          error instanceof Error ? error.message : "Data not found Error"
+        );
         setProducts([]);
       }
     };
@@ -51,14 +61,43 @@ export default function App() {
     fetchData();
   }, [onPageChange, onKeyChange]);
 
-  const [selectedKey, setSelectedKey] = useState(products[0]?.id);
-
   return (
     <>
-      <DataTable value={products} tableStyle={{ minWidth: "50rem" }}>      
-        <Column body={() => (
-          <Checkbox checked={checked} onChange={(e: CheckboxChangeEvent) => setChecked(e.checked ?? false)} />
-        )} exportable={false}/>
+      <DataTable
+        value={products}
+        selectionMode="multiple"
+        selection={checked}
+        onSelectionChange={(e) => setChecked(e.value)}
+        className="p-checkbox-hidden-icon"
+      >
+        <Column
+          selectionMode="multiple"
+          header={
+              <i
+                className="pi pi-angle-down"
+                onClick={(e) => {
+                  e.preventDefault();
+                  op.current?.toggle(e);
+                }}
+              ></i>
+          }
+          body={(rowData) => (
+            <Checkbox
+              checked={checked.includes(rowData.id)}
+              value={rowData.id}
+              onChange={(e: CheckboxChangeEvent) => {
+                const newChecked = [...checked];
+                if (e.checked) {
+                  newChecked.push(e.value);
+                } else {
+                  newChecked.splice(newChecked.indexOf(e.value), 1);
+                }
+                setChecked(newChecked);
+              }}
+            />
+          )}
+          exportable={false}
+        />
         <Column field="title" header="Title"></Column>
         <Column field="place_of_origin" header="Place of Origin"></Column>
         <Column field="artist_display" header="Artist Display"></Column>
@@ -72,7 +111,19 @@ export default function App() {
         rows={rows}
         totalRecords={144}
         onPageChange={onPageChange}
-      />    
+      />
+      <OverlayPanel ref={op}>
+          <div className="p-4 bg-white shadow rounded-lg">
+            <div className="mb-4">
+            <InputText
+                placeholder="Select Rows..."
+                onChange={(e:any) => setValue(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              />
+            </div>
+          <Button label="Submit" onClick={selectRows} />
+          </div>
+      </OverlayPanel>
     </>
   );
 }

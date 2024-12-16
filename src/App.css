@@ -40,3 +40,11 @@
 .read-the-docs {
   color: #888;
 }
+
+.p-checkbox .p-icon {
+  display: none;
+}
+
+.p-checkbox-hidden-icon .p-icon {
+  display: none;
+}
