@@ -18,6 +18,7 @@ export default function App() {
   const [rows, setRows] = useState(12);
   const op = useRef<OverlayPanel>(null);
   const [value, setValue] = useState(0);
+  const [extra, setExtra] = useState(0);
 
   const onPageChange = (event: {
     first: number;
@@ -35,12 +36,14 @@ export default function App() {
 
   const selectRows = (e: React.MouseEvent) => {
     e.preventDefault();
-
-    const newChecked = [...checked];
-    newChecked.splice(0, 0, ...products.slice(first, first + value));
-    setChecked(newChecked); 
     op.current?.hide();
   };
+
+  const onChange = useEffect(() => {
+    setFirst(first + 12);
+    setRows(rows);
+    setPage(first / rows + 1);
+  }, [extra]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,9 +60,29 @@ export default function App() {
         setProducts([]);
       }
     };
-
     fetchData();
-  }, [onPageChange, onKeyChange]);
+  }, [onPageChange, onChange]);
+
+  useEffect(() => {
+    if (value > 12) {
+      if (page === 1) {
+        const newChecked = [...checked];
+        console.log(newChecked);
+        newChecked.splice(0, 0, ...products.slice(0, first));
+        setChecked(newChecked);
+      }
+      if (page === 2) {
+        const newChecked = [...checked];
+        console.log(newChecked);
+        newChecked.splice(0, 0, ...products.slice(12, value));
+        setChecked(newChecked);
+      }
+    } else {
+        const newChecked = [...checked];
+        newChecked.splice(0, 0, ...products.slice(0, value));
+        setChecked(newChecked);
+    }
+  }, [first, value]);
 
   return (
     <>
@@ -73,13 +96,13 @@ export default function App() {
         <Column
           selectionMode="multiple"
           header={
-              <i
-                className="pi pi-angle-down"
-                onClick={(e) => {
-                  e.preventDefault();
-                  op.current?.toggle(e);
-                }}
-              ></i>
+            <i
+              className="pi pi-angle-down"
+              onClick={(e) => {
+                e.preventDefault();
+                op.current?.toggle(e);
+              }}
+            ></i>
           }
           body={(rowData) => (
             <Checkbox
@@ -113,16 +136,16 @@ export default function App() {
         onPageChange={onPageChange}
       />
       <OverlayPanel ref={op}>
-          <div className="p-4 bg-white shadow rounded-lg">
-            <div className="mb-4">
+        <div className="card flex flex-column justify-content-center gap-3 mb-4">
             <InputText
-                placeholder="Select Rows..."
-                onChange={(e:any) => setValue(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
-          <Button label="Submit" onClick={selectRows} />
+              placeholder="Select Rows..."
+              onChange={(e: any) => setValue(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            />
+          <div className="flex justify-content-end gap-2">
+            <Button label="Submit" onClick={selectRows} />
           </div>
+        </div>
       </OverlayPanel>
     </>
   );
