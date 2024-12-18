@@ -2,7 +2,7 @@ import "./App.css";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import axios from "axios";
-import { constructor, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Paginator } from "primereact/paginator";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import "primeicons/primeicons.css";
