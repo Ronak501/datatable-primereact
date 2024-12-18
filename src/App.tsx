@@ -2,7 +2,7 @@ import "./App.css";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { constructor, useEffect, useRef, useState } from "react";
 import { Paginator } from "primereact/paginator";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import "primeicons/primeicons.css";
@@ -30,20 +30,16 @@ export default function App() {
     setPage(event.first / event.rows + 1);
   };
 
-  const onKeyChange = (e: CheckboxChangeEvent) => {
-    setChecked(e.value);
-  };
-
   const selectRows = (e: React.MouseEvent) => {
     e.preventDefault();
     op.current?.hide();
   };
 
-  const onChange = useEffect(() => {
+  const onChange =() => {
     setFirst(first + 12);
     setRows(rows);
     setPage(first / rows + 1);
-  }, [extra]);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,28 +57,25 @@ export default function App() {
       }
     };
     fetchData();
-  }, [onPageChange, onChange]);
+  }, [onPageChange, onChange  ]);
 
   useEffect(() => {
-    if (value > 12) {
-      if (page === 1) {
-        const newChecked = [...checked];
-        console.log(newChecked);
-        newChecked.splice(0, 0, ...products.slice(0, first));
-        setChecked(newChecked);
-      }
-      if (page === 2) {
-        const newChecked = [...checked];
-        console.log(newChecked);
-        newChecked.splice(0, 0, ...products.slice(12, value));
-        setChecked(newChecked);
-      }
-    } else {
-        const newChecked = [...checked];
-        newChecked.splice(0, 0, ...products.slice(0, value));
-        setChecked(newChecked);
+    const selectCheckBox = async () => {
+      const newChecked = [...checked];
+      newChecked.splice(0, 0, ...products.slice(0, first));
+      setChecked(newChecked);
+      await onChange();
     }
-  }, [first, value]);
+
+    selectCheckBox();
+    //wait for 1 to 2 seconds
+    if (value > 12) {
+      const rem = value - 12;
+      const newUnChecked = [...checked];
+      newUnChecked.splice(0, 0, ...products.slice(0, rem));
+      setChecked(newUnChecked);
+    }
+  }, [value]);
 
   return (
     <>
