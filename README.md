@@ -1,50 +1,93 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# DataTable with PrimeReact
 
-Currently, two official plugins are available:
+This project is a React-based application showcasing a dynamic and interactive data table built using **PrimeReact** components. It demonstrates efficient data handling, customization, and styling for modern web applications.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Live Demo
 
-## Expanding the ESLint configuration
+Check out the live application here: [Manage DataTable](https://manage-datatable.netlify.app/)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Features
 
-- Configure the top-level `parserOptions` property like this:
+- **Dynamic Data Table**: Easily manage, display, and interact with tabular data.
+- **Sorting and Filtering**: Built-in functionality for sorting and filtering data.
+- **Pagination**: Seamlessly navigate through large datasets.
+- **Responsive Design**: Optimized for all screen sizes.
+- **Customizable Columns**: Adjust column visibility and order as needed.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Technologies Used
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- **React**: JavaScript library for building user interfaces.
+- **PrimeReact**: UI components for React, including the DataTable.
+- **CSS**: Styling for the application.
+- **Netlify**: Hosting platform for the live application.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Installation
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+To run this project locally, follow these steps:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Ronak501/datatable-primereact.git
+   ```
+
+2. Navigate to the project directory:
+   ```bash
+   cd datatable-primereact
+   ```
+
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+4. Start the development server:
+   ```bash
+   npm start
+   ```
+
+5. Open your browser and go to:
+   ```
+   http://localhost:3000
+   ```
+
+## Usage
+
+1. **View Data**: Browse the data displayed in the table.
+2. **Sort Data**: Click on column headers to sort data in ascending or descending order.
+3. **Filter Data**: Use the filter options to narrow down the displayed data.
+4. **Pagination**: Navigate through the dataset using the pagination controls.
+
+## Project Structure
+
+- **src/**: Contains the source code for the application.
+  - **components/**: Reusable components, including the DataTable.
+  - **styles/**: Custom CSS files for styling.
+  - **App.tsx**: Main application component.
+
+## Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork the repository.
+2. Create a new branch:
+   ```bash
+   git checkout -b feature-name
+   ```
+3. Make your changes and commit them:
+   ```bash
+   git commit -m "Description of changes"
+   ```
+4. Push to your fork:
+   ```bash
+   git push origin feature-name
+   ```
+5. Create a pull request.
+
+## Contact
+
+For any inquiries or feedback, feel free to reach out:
+
+- **GitHub**: [Ronak501](https://github.com/Ronak501)
+- **Live Application**: [Manage DataTable](https://manage-datatable.netlify.app/)
