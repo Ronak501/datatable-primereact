@@ -18,7 +18,6 @@ export default function App() {
   const [rows, setRows] = useState(12);
   const op = useRef<OverlayPanel>(null);
   const [value, setValue] = useState(0);
-  const [extra, setExtra] = useState(0);
 
   const onPageChange = (event: {
     first: number;
